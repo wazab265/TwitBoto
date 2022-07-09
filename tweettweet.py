@@ -1,7 +1,21 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+#environment varaiables
+
+API_KEY=os.getenv("API_KEY")
+API_SECRET=os.getenv("API_SECRET")
+AUTH_TOKEN=os.getenv("AUTH_TOKEN")
+AUTH_TOKEN_SECRET=os.getenv("AUTH_TOKEN_SECRET")
+
+
 import tweepy
 import time
-auth = tweepy.OAuthHandler('bU1kKCSj4Jd3cdBp6ZrYxKxki', 'uN5lP77cegAhrjO6oKBxTngBmAXnotWvo6kHzsUgnaoYkbJDPE')
-auth.set_access_token('1473939311317766146-PLiHu6sJDaZ7nsU1xNDa8w2U9q8PNX', 'Be2ST3qQfRRJyeYARplThLczddouaj0oFxGgN6Swp4XhJ')
+
+
+auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+auth.set_access_token(AUTH_TOKEN,AUTH_TOKEN_SECRET) 
 
 api = tweepy.API(auth)
 user=api.me()

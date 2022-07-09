@@ -13,8 +13,33 @@ def limit_handler(cursor):
       yield cursor.next()
   except tweepy.RateLimitError:
       time.sleep(1000)
-#Generous bot
-for follower in limit_handler(tweepy.Cursor(api.followers).items()):
-  if follower.followers_count>100:
-    follower.follow()
+
+search_string ='python'
+numbersofTweets=2
+
+for tweet in limit_handler(tweepy.Cursor(api.search,search_string).items(numbersofTweets)):
+  try:
+    tweet.favorite()
+    #tweet.retweet()
+    print('I liked that tweet')
+  except tweepy.TweepError as e:
+    print(e.reason)
+  except StopIteration:
     break
+
+
+
+
+
+
+
+
+
+
+
+
+#Generous bot
+# for follower in limit_handler(tweepy.Cursor(api.followers).items()):
+#   if follower.followers_count>100:
+#     follower.follow()
+#     break

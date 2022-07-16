@@ -23,7 +23,10 @@ user=api.me()
 def limit_handler(cursor):
   try:
     while True:
-      yield cursor.next()
+      try:
+        yield cursor.next()
+      except StopIteration:
+        return #https://stackoverflow.com/a/51701040/14395149
   except tweepy.RateLimitError:
       time.sleep(1000)
 
@@ -70,10 +73,11 @@ feed_accs2=[
 ]
 
 for acc_name in feed_accs2:
-    for tweet in limit_handler(tweepy.Cursor(api.user_timeline,screen_name=acc_name).items(numbersofTweets)):
-      try:
-        tweet.favorite()
-      except tweepy.TweepError as e:
-        print(e.reason)
-      except StopIteration:
-        break
+  for tweet in limit_handler(tweepy.Cursor(api.user_timeline,screen_name=acc_name).items(numbersofTweets)):
+    try:
+      tweet.favorite()
+    except tweepy.TweepError as e:
+      print(e.reason)
+    except StopIteration:
+      break
+        

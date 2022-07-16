@@ -17,7 +17,6 @@ auth.set_access_token(AUTH_TOKEN, AUTH_TOKEN_SECRET)
 
 api = tweepy.API(auth)
 user = api.me()
-print(user.followers_count)
 
 
 def limit_handler(cursor):
@@ -28,15 +27,7 @@ def limit_handler(cursor):
         time.sleep(1000)
 
 
-search_string = 'python'
-numbersofTweets = 2
-
-for tweet in limit_handler(tweepy.Cursor(api.search, search_string).items(numbersofTweets)):
-    try:
-        tweet.favorite()
-        # tweet.retweet()
-        print('I liked that tweet')
-    except tweepy.TweepError as e:
-        print(e.reason)
-    except StopIteration:
+for follower in limit_handler(tweepy.Cursor(api.followers).items()):
+    if follower.followers_count > 100:
+        follower.follow()
         break

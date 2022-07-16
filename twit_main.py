@@ -17,14 +17,6 @@ import time
 auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
 auth.set_access_token(AUTH_TOKEN,AUTH_TOKEN_SECRET) 
 
-''' Type 2 authentication (public data access)'''
-# auth2=tweepy.AppAuthHandler(API_KEY, API_SECRET)
-# api2 = tweepy.API(auth2)
-# for tweet in tweepy.Cursor(api2.search, q='foodandwine').items(10):
-#     print(tweet.text)
-
-
-
 api = tweepy.API(auth)
 user=api.me()
 
@@ -36,44 +28,10 @@ def limit_handler(cursor):
       time.sleep(1000)
 
 search_string ='@'+user.screen_name
-numbersofTweets=4
-
+numbersofTweets=5
 followers=dict()
-feed_accs=[
-  'TheBoysTV',
-  '@MyDearManorama',
-  'DudespostingWs',
-  'Apple',
-  'Music_Santhosh',
-  'SilambarasanTR_',
-  'DCpeacemaker',
-  'BetterCallSaul',
-  'NaMu_Keechugal',
-  'sagarcasm',
-  'getpeid',
-  'Cristiano',
-  'every_daydad',
-  'B_Fernandes8',
-  'Sanchooo10',
-  'Mrwhosetheboss',
-  'MrBeast',
-  'brfootball',
-  'JColeNC',
-  'AppleMusic',
-  'ManUtd', #GGMU💪🏼
-  'ChennaiIPL',
-  'MacAddressYT',
-  'BasicAppleGuy',
-  'AndreiNeagoie',
-  'tim_cook',
-  'linusgsebastian',
-  'LinusTech',
-  'MKBHD',
-]
 
-tweets=api.user_timeline(screen_name='tim_cook',count=5)
-
-
+'''To get list of tweets'''
 # tmp=[] 
 # # create array of tweet information: username, 
 # # tweet id, date/time, text
@@ -85,38 +43,27 @@ tweets=api.user_timeline(screen_name='tim_cook',count=5)
 # for t in tmp:
 #   print(t)
 
-  
 
-
-# feed_ids=dict()
-# for acc_name in feed_accs:
-#   feed_user=api.get_user(screen_name=acc_name) 
-
-
-# print(len(feed_accs))
-
-# for person in user.followers():
-#   followers[person.id]=person.screen_name
-
+'''Status with single user'''
 # # user2=api.get_user(screen_name='nithsua')
 # # Status = api.show_friendship(source_id = user.id , source_screen_name = user.screen_name, target_id = user2.id, target_screen_name = user2.screen_name)
 # # print(user.id)
 # # print(user2.id)
-# # print(Status)
+# # print(Status)``
 
-# #To like tweets of friends who mention me and also follow me
-# for tweet in limit_handler(tweepy.Cursor(api.search,search_string).items(numbersofTweets)):
-#   try:
-#     #tweet.favorite()
-#     #tweet.retweet()
-#     user2=tweet.user
-#     Status=api.show_friendship(source_id=user.id,source_screen_name=user.screen_name,target_id=user2.id,target_screen_name=user2.screen_name)
-#     if Status[0].followed_by and Status[1].followed_by:
-#       print(tweet.text)
-#       print('-'+ tweet.user.screen_name)
-#       tweet.favorite()
-#     print('****************************************************************')
-#   except tweepy.TweepError as e:
-#     print(e.reason)
-#   except StopIteration:
-#     break
+'''To like tweets of friends who mention me and also follow me'''
+for tweet in limit_handler(tweepy.Cursor(api.search,search_string).items(numbersofTweets)):
+  try:
+    #tweet.favorite()
+    #tweet.retweet()
+    user2=tweet.user
+    Status=api.show_friendship(source_id=user.id,source_screen_name=user.screen_name,target_id=user2.id,target_screen_name=user2.screen_name)
+    if Status[0].followed_by and Status[1].followed_by:
+      print(tweet.text)
+      print('-'+ tweet.user.screen_name)
+      tweet.favorite()
+    print('****************************************************************')
+  except tweepy.TweepError as e:
+    print(e.reason)
+  except StopIteration:
+    break
